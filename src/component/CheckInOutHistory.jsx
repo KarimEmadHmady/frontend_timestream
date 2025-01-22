@@ -19,7 +19,7 @@ function CheckInOutHistory() {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get(`http://localhost:5000/api/checkinout/history/${userId}`);
+      const response = await axios.get(`https://backend-timestream.vercel.app/api/checkinout/history/${userId}`);
       if (Array.isArray(response.data)) {
         setHistory(response.data);
       } else {
