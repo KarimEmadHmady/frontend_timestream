@@ -11,7 +11,7 @@ function UserTable() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/checkinout/all-users");
+        const response = await fetch("https://backend-timestream.vercel.app/api/checkinout/all-users");
         const data = await response.json();
 
         
