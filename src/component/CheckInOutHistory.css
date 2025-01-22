@@ -1,0 +1,127 @@
+
+
+  
+  /* Input field and button */
+    input[type="text"] {
+    padding: 8px;
+    font-size: 14px;
+    width: 200px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  button:disabled {
+   
+    cursor: not-allowed;
+  }
+
+  
+  /* Table styling */
+  table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Table headers */
+  th {
+    padding: 12px;
+    background-color: #000;
+    color: #0086ca;
+    text-align: left;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Table data */
+  td {
+    padding: 12px;
+    font-size: 14px;
+    text-align: left;
+    border-bottom: 1px solid #000;
+    color: #eee;
+  }
+  
+  td:nth-child(even) {
+   
+  }
+  
+  td:last-child {
+    font-weight: bold;
+  }
+  
+  /* Hover effect for rows */
+  tr:hover {
+    background-color: #0086ca;
+    color: #eee;
+  }
+  
+/* Container to position input and icon */
+.input-container {
+    position: relative;
+
+  }
+  
+  /* Styled input field */
+  .input-container input[type="text"] {
+    width: 100%;
+    padding: 3px 40px; /* Padding includes space for the icon */
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+  
+  /* Focus effect */
+  .input-container input[type="text"]:focus {
+    border-color: #1e6a9b;
+    background-color: #ffffff;
+    outline: none;
+  }
+  
+  /* Icon inside input */
+  .input-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: #aaa;
+  }
+  
+  .input-container input[type="text"]:focus + .input-icon {
+    color: #1e6a9b;
+  }
+  .content-btn-futch{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+
+  /* Responsive table for small screens */
+  @media (max-width: 768px) {
+    table {
+      font-size: 12px;
+    }
+  
+    input[type="text"], button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    div {
+        font-family: Arial, sans-serif;
+        padding: 3px;
+      }
+      td {
+        padding: 5px;
+        font-size: 10px;
+        border-bottom: 1px solid #000;
+      }
+  }
+  
