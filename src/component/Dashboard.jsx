@@ -46,7 +46,7 @@ function Dashboard() {
 
     if (user) {
       try {
-        const response = await axios.post('http://localhost:5000/api/checkinout/checkin', {
+        const response = await axios.post('https://backend-timestream.vercel.app/api/checkinout/checkin', {
           userId: user.id,
           firstName: user.firstName,
           lastName: user.lastName,
@@ -79,7 +79,7 @@ function Dashboard() {
   
     if (user) {
       try {
-        const response = await axios.post('http://localhost:5000/api/checkinout/checkout', {
+        const response = await axios.post('https://backend-timestream.vercel.app/api/checkinout/checkout', {
           userId: user.id, // Ensure userId is correctly passed
           checkOutTime,
         });
