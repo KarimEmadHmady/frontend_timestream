@@ -41,14 +41,79 @@ function Dashboard() {
     }
   }, []);
 
+  // const handleCheckIn = async () => {
+  //   setIsCheckedIn(true);
+  //   const checkInTime = new Date().toISOString();
+  //   setStartTime(checkInTime);
+
+  //   localStorage.setItem("status", "checked-in");
+  //   localStorage.setItem("checkInTime", checkInTime);
+
+  //   if (user) {
+  //     try {
+  //       const response = await axios.post(
+  //         `${import.meta.env.VITE_BACKEND_API_URL}/api/checkinout/checkin`,
+  //         {
+  //           userId: user.id,
+  //           firstName: user.firstName,
+  //           lastName: user.lastName,
+  //           email: user.email,
+  //           checkInTime,
+  //         }
+  //       );
+  //       toast.success(response.data.message);
+  //     } catch (error) {
+  //       console.error(error);
+  //       if (error.response && error.response.data) {
+  //         toast.error(error.response.data.error || "Failed to record check-in");
+  //       } else {
+  //         toast.error("Failed to record check-in");
+  //       }
+  //     }
+  //   } else {
+  //     toast.error("User not found");
+  //   }
+  // };
+
+  // const handleCheckOut = async () => {
+  //   const checkOutTime = new Date().toISOString();
+
+  //   localStorage.setItem("status", "checked-out");
+  //   localStorage.setItem("checkOutTime", checkOutTime);
+
+  //   if (user) {
+  //     try {
+  //       const response = await axios.post(
+  //         `${import.meta.env.VITE_BACKEND_API_URL}/api/checkinout/checkout`,
+  //         {
+  //           userId: user.id, // Ensure userId is correctly passed
+  //           checkOutTime,
+  //         }
+  //       );
+  //       toast.success(response.data.message);
+  //       setIsCheckedIn(false); // Update UI to reflect user has checked out
+  //     } catch (error) {
+  //       const errorMessage = error.response
+  //         ? error.response.data.error
+  //         : "Failed to record check-out";
+  //       toast.error(errorMessage);
+  //       console.error(errorMessage);
+  //     }
+  //   } else {
+  //     toast.error("User not found");
+  //   }
+  // };
+
+
+
   const handleCheckIn = async () => {
     setIsCheckedIn(true);
-    const checkInTime = new Date().toISOString();
+    const checkInTime = new Date().toISOString(); // تأكد من تخزينه بنفس التنسيق
     setStartTime(checkInTime);
-
+  
     localStorage.setItem("status", "checked-in");
     localStorage.setItem("checkInTime", checkInTime);
-
+  
     if (user) {
       try {
         const response = await axios.post(
@@ -64,46 +129,35 @@ function Dashboard() {
         toast.success(response.data.message);
       } catch (error) {
         console.error(error);
-        if (error.response && error.response.data) {
-          toast.error(error.response.data.error || "Failed to record check-in");
-        } else {
-          toast.error("Failed to record check-in");
-        }
+        toast.error(error.response?.data?.error || "Failed to record check-in");
       }
     } else {
       toast.error("User not found");
     }
   };
-
+  
   const handleCheckOut = async () => {
-    const checkOutTime = new Date().toISOString();
-
+    const checkOutTime = new Date().toISOString(); // تأكد من التخزين بنفس التنسيق
+  
     localStorage.setItem("status", "checked-out");
     localStorage.setItem("checkOutTime", checkOutTime);
-
+  
     if (user) {
       try {
         const response = await axios.post(
           `${import.meta.env.VITE_BACKEND_API_URL}/api/checkinout/checkout`,
-          {
-            userId: user.id, // Ensure userId is correctly passed
-            checkOutTime,
-          }
+          { userId: user.id }
         );
         toast.success(response.data.message);
-        setIsCheckedIn(false); // Update UI to reflect user has checked out
+        setIsCheckedIn(false);
       } catch (error) {
-        const errorMessage = error.response
-          ? error.response.data.error
-          : "Failed to record check-out";
-        toast.error(errorMessage);
-        console.error(errorMessage);
+        toast.error(error.response?.data?.error || "Failed to record check-out");
       }
     } else {
       toast.error("User not found");
     }
   };
-
+  
   return (
     <div>
       <header>
