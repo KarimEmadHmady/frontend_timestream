@@ -9,7 +9,7 @@ const Clock = () => {
 
   useEffect(() => {
     const updateClock = () => {
-      setTime(moment().format('h:mm:ss A')); // 'h' for 12-hour format, 'A' for AM/PM
+      setTime(moment().format('h:mm:ss A')); 
       setDay(moment().format('dddd'));
       setDate(moment().format('D. MMMM YYYY'));
     };

@@ -1,8 +1,7 @@
-import './UserTable.css';
+import "./UserTable.css";
 import React, { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer and toast
-import "react-toastify/dist/ReactToastify.css"; // Import CSS for react-toastify
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function UserTable() {
   const [users, setUsers] = useState([]);
   const [isUsersLoaded, setIsUsersLoaded] = useState(false);
@@ -11,18 +10,19 @@ function UserTable() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("https://backend-timestream.vercel.app/api/checkinout/all-users");
+        const response = await fetch(
+          `${import.meta.env.VITE_BACKEND_API_URL}/api/checkinout/all-users`
+        );
         const data = await response.json();
-
-        
 
         // Check if data is an array and contains the necessary fields
         if (Array.isArray(data) && data.length > 0) {
-          const uniqueUsers = Array.from(new Map(data.map(user => [user._id, user])).values());
-          
+          const uniqueUsers = Array.from(
+            new Map(data.map((user) => [user._id, user])).values()
+          );
 
-          setUsers(uniqueUsers); // Set the users state
-          setIsUsersLoaded(true); // Mark users as loaded
+          setUsers(uniqueUsers);
+          setIsUsersLoaded(true);
         } else {
           console.error("No users found or invalid data:", data);
         }
@@ -36,12 +36,15 @@ function UserTable() {
 
   // Function to copy userId (which is _id) to clipboard
   const copyToClipboard = (userId) => {
-    navigator.clipboard.writeText(userId).then(() => {
-      toast.success("User ID copied to clipboard!"); // Use toast.success for success message
-    }).catch((error) => {
-      console.error("Failed to copy user ID: ", error);
-      toast.error("Failed to copy user ID"); // Show error message if copy fails
-    });
+    navigator.clipboard
+      .writeText(userId)
+      .then(() => {
+        toast.success("User ID copied to clipboard!");
+      })
+      .catch((error) => {
+        console.error("Failed to copy user ID: ", error);
+        toast.error("Failed to copy user ID");
+      });
   };
 
   return (
@@ -62,7 +65,10 @@ function UserTable() {
                   <tr key={user._id}>
                     <td>{`${user.firstName} ${user.lastName}`}</td>
                     <td>
-                      <button className='btn-dashbord-emp' onClick={() => copyToClipboard(user._id)}>
+                      <button
+                        className="btn-dashbord-emp"
+                        onClick={() => copyToClipboard(user._id)}
+                      >
                         Copy User ID
                       </button>
                     </td>
@@ -77,8 +83,7 @@ function UserTable() {
           </table>
         </div>
       )}
-      
-      {/* ToastContainer to show toasts */}
+
       <ToastContainer />
     </div>
   );

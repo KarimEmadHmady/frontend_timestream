@@ -3,7 +3,7 @@ import axios from "axios";
 import './CheckInOutHistory.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import * as XLSX from "xlsx"; // Import xlsx
+import * as XLSX from "xlsx"; 
 
 function CheckInOutHistory() {
   const [userId, setUserId] = useState("");
@@ -19,7 +19,7 @@ function CheckInOutHistory() {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get(`https://backend-timestream.vercel.app/api/checkinout/history/${userId}`);
+      const response = await axios.get( `${import.meta.env.VITE_BACKEND_API_URL}/api/checkinout/history/${userId}`);
       if (Array.isArray(response.data)) {
         setHistory(response.data);
       } else {
