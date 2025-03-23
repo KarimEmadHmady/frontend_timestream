@@ -18,7 +18,7 @@ import { faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 function Dashboard() {
   const [isCheckedIn, setIsCheckedIn] = useState(false);
   const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null); // متغير جديد لتخزين وقت الخروج
+  const [endTime, setEndTime] = useState(null);
   const { user } = useUser();
 
   // Check the status and time from localStorage when the component loads
@@ -36,11 +36,11 @@ function Dashboard() {
       setStartTime(checkInTime);
     } else if (status === "checked-out") {
       setIsCheckedIn(false);
-      setEndTime(checkOutTime); // عرض وقت الخروج إذا كان موجودًا
+      setEndTime(checkOutTime);
     }
 
     if (checkInTime) {
-      const checkInDate = new Date(checkInTime);
+      const checkInDate = new Date(localStorage.getItem("checkInTime"));
       const now = new Date();
       const timeDifference = Math.floor((now - checkInDate) / (1000 * 60)); // Time difference in minutes
       console.log(`Time since check-in: ${timeDifference} minutes`);
@@ -150,13 +150,8 @@ function Dashboard() {
         )}
       </div>
 
-      {/* عرض وقت الدخول والخروج */}
-      {startTime && (
-        <p>Check-in Time: {startTime}</p>
-      )}
-      {endTime && (
-        <p>Check-out Time: {endTime}</p>
-      )}
+      {startTime && <p>Check-in Time: {startTime}</p>}
+      {endTime && <p>Check-out Time: {endTime}</p>}
 
       <ToastContainer />
     </div>
