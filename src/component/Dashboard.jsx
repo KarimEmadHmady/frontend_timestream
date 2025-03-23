@@ -18,25 +18,25 @@ import { faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 function Dashboard() {
   const [isCheckedIn, setIsCheckedIn] = useState(false);
   const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null); // متغير جديد لتخزين وقت الخروج
   const { user } = useUser();
 
   // Check the status and time from localStorage when the component loads
   useEffect(() => {
     const status = localStorage.getItem("status");
-    const checkInTime = localStorage.getItem("checkInTime") 
-    ? new Date(localStorage.getItem("checkInTime")).toLocaleString("en-US", { timeZone: "Africa/Cairo" }) 
-    : null;
-  
-  const checkOutTime = localStorage.getItem("checkOutTime") 
-    ? new Date(localStorage.getItem("checkOutTime")).toLocaleString("en-US", { timeZone: "Africa/Cairo" }) 
-    : null;
-  
-  
+    const checkInTime = localStorage.getItem("checkInTime")
+      ? new Date(localStorage.getItem("checkInTime")).toLocaleString("en-US", { timeZone: "Africa/Cairo" })
+      : null;
+    const checkOutTime = localStorage.getItem("checkOutTime")
+      ? new Date(localStorage.getItem("checkOutTime")).toLocaleString("en-US", { timeZone: "Africa/Cairo" })
+      : null;
+
     if (status === "checked-in") {
       setIsCheckedIn(true);
       setStartTime(checkInTime);
     } else if (status === "checked-out") {
       setIsCheckedIn(false);
+      setEndTime(checkOutTime); // عرض وقت الخروج إذا كان موجودًا
     }
 
     if (checkInTime) {
@@ -48,13 +48,13 @@ function Dashboard() {
   }, []);
 
   const handleCheckIn = async () => {
-    setIsCheckedIn(true);
     const checkInTime = new Date().toISOString();
-        setStartTime(checkInTime);
-  
+    setIsCheckedIn(true);
+    setStartTime(new Date(checkInTime).toLocaleString("en-US", { timeZone: "Africa/Cairo" }));
+
     localStorage.setItem("status", "checked-in");
     localStorage.setItem("checkInTime", checkInTime);
-  
+
     if (user) {
       try {
         const response = await axios.post(
@@ -76,12 +76,14 @@ function Dashboard() {
       toast.error("User not found");
     }
   };
-  
+
   const handleCheckOut = async () => {
     const checkOutTime = new Date().toISOString();
+    setEndTime(new Date(checkOutTime).toLocaleString("en-US", { timeZone: "Africa/Cairo" }));
+
     localStorage.setItem("status", "checked-out");
     localStorage.setItem("checkOutTime", checkOutTime);
-  
+
     if (user) {
       try {
         const response = await axios.post(
@@ -97,7 +99,7 @@ function Dashboard() {
       toast.error("User not found");
     }
   };
-  
+
   return (
     <div>
       <header>
@@ -116,7 +118,7 @@ function Dashboard() {
           textAlign: "center",
           marginTop: "20px",
           display: "flex",
-          justifyContent: "cente",
+          justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
         }}
@@ -148,13 +150,17 @@ function Dashboard() {
         )}
       </div>
 
+      {/* عرض وقت الدخول والخروج */}
+      {startTime && (
+        <p>Check-in Time: {startTime}</p>
+      )}
+      {endTime && (
+        <p>Check-out Time: {endTime}</p>
+      )}
+
       <ToastContainer />
     </div>
   );
 }
 
 export default Dashboard;
-
-
-
-// https://time-stream-creations.vercel.app/employees for admin dashboard HR
