@@ -23,13 +23,14 @@ function Dashboard() {
   // Check the status and time from localStorage when the component loads
   useEffect(() => {
     const status = localStorage.getItem("status");
-    const checkInTime = localStorage.getItem("checkInTime")
-    ? new Date(localStorage.getItem("checkInTime")).toLocaleString("en-US", { timeZone: "Africa/Cairo" })
+    const checkInTime = localStorage.getItem("checkInTime") 
+    ? new Date(localStorage.getItem("checkInTime")).toLocaleString("en-US", { timeZone: "Africa/Cairo" }) 
     : null;
   
-    const checkOutTime = localStorage.getItem("checkOutTime")
-    ? new Date(localStorage.getItem("checkOutTime")).toLocaleString("en-US", { timeZone: "Africa/Cairo" })
+  const checkOutTime = localStorage.getItem("checkOutTime") 
+    ? new Date(localStorage.getItem("checkOutTime")).toLocaleString("en-US", { timeZone: "Africa/Cairo" }) 
     : null;
+  
   
     if (status === "checked-in") {
       setIsCheckedIn(true);
@@ -49,7 +50,7 @@ function Dashboard() {
   const handleCheckIn = async () => {
     setIsCheckedIn(true);
     const checkInTime = new Date().toISOString();
-    setStartTime(checkInTime);
+        setStartTime(checkInTime);
   
     localStorage.setItem("status", "checked-in");
     localStorage.setItem("checkInTime", checkInTime);
