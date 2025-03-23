@@ -56,13 +56,17 @@ function Dashboard() {
   }, []);
 
   const handleCheckIn = async () => {
-    const checkInTime = new Date().toISOString(); // UTC time
-    const cairoTime = timeFormatter.format(new Date(checkInTime)); // Cairo time for display
-    console.log("Raw checkInTime (UTC):", checkInTime);
-    console.log("Displayed checkInTime (Cairo):", cairoTime);
+    // Get current time in Cairo timezone
+    const cairoTime = new Date().toLocaleString("en-US", { timeZone: "Africa/Cairo" });
+    const checkInTime = new Date(cairoTime).toISOString(); // Convert to UTC for storage
+    const displayTime = timeFormatter.format(new Date(checkInTime)); // For display
+
+    console.log("Cairo Time (Check-In):", cairoTime);
+    console.log("Stored checkInTime (UTC):", checkInTime);
+    console.log("Displayed checkInTime:", displayTime);
 
     setIsCheckedIn(true);
-    setStartTime(cairoTime);
+    setStartTime(displayTime);
 
     localStorage.setItem("status", "checked-in");
     localStorage.setItem("checkInTime", checkInTime);
@@ -76,7 +80,7 @@ function Dashboard() {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            checkInTime,
+            checkInTime, // Send UTC time
           }
         );
         toast.success(response.data.message);
@@ -90,10 +94,16 @@ function Dashboard() {
   };
 
   const handleCheckOut = async () => {
-    const checkOutTime = new Date().toISOString();
-    const cairoTime = timeFormatter.format(new Date(checkOutTime));
+    // Get current time in Cairo timezone
+    const cairoTime = new Date().toLocaleString("en-US", { timeZone: "Africa/Cairo" });
+    const checkOutTime = new Date(cairoTime).toISOString(); // Convert to UTC for storage
+    const displayTime = timeFormatter.format(new Date(checkOutTime)); // For display
 
-    setEndTime(cairoTime);
+    console.log("Cairo Time (Check-Out):", cairoTime);
+    console.log("Stored checkOutTime (UTC):", checkOutTime);
+    console.log("Displayed checkOutTime:", displayTime);
+
+    setEndTime(displayTime);
 
     localStorage.setItem("status", "checked-out");
     localStorage.setItem("checkOutTime", checkOutTime);
