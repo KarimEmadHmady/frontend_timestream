@@ -56,12 +56,17 @@ function Dashboard() {
   }, []);
 
   const handleCheckIn = async () => {
-    // Get current time in Cairo timezone
-    const cairoTime = new Date().toLocaleString("en-US", { timeZone: "Africa/Cairo" });
-    const checkInTime = new Date(cairoTime).toISOString(); // Convert to UTC for storage
-    const displayTime = timeFormatter.format(new Date(checkInTime)); // For display
+    // Get current UTC time
+    const utcTime = new Date();
+    // Adjust to Cairo time (UTC+2)
+    const cairoOffset = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+    const cairoTime = new Date(utcTime.getTime() + cairoOffset);
 
-    console.log("Cairo Time (Check-In):", cairoTime);
+    // Convert to UTC ISO string for storage
+    const checkInTime = cairoTime.toISOString();
+    const displayTime = timeFormatter.format(cairoTime); // For display
+
+    console.log("Adjusted Cairo Time:", cairoTime.toString());
     console.log("Stored checkInTime (UTC):", checkInTime);
     console.log("Displayed checkInTime:", displayTime);
 
