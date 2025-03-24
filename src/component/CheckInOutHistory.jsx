@@ -19,12 +19,8 @@ function CheckInOutHistory() {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get( `${import.meta.env.VITE_BACKEND_API_URL}/api/checkinout/history/${userId}`);
-      if (Array.isArray(response.data)) {
-        setHistory(response.data);
-      } else {
-        setError("Received data is not in the expected format.");
-      }
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_API_URL}/api/checkinout/history/${userId}`);
+      setHistory(response.data || []);
     } catch (err) {
       setError("Failed to fetch history");
     } finally {
@@ -35,28 +31,26 @@ function CheckInOutHistory() {
   const exportToExcel = () => {
     const data = history.map(record => ({
       Name: `${record.firstName} ${record.lastName}`,
-      Date: formatDateWithDay(record.date),
-      CheckInTime: new Date(record.checkInTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      CheckOutTime: new Date(record.checkOutTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      TotalHours: calculateTotalHours(record.checkInTime, record.checkOutTime),
+      Date: formatDateWithDay(record.checkInTime),
+      CheckInTime: record.checkInTime,
+      CheckOutTime: record.checkOutTime ? record.checkOutTime : "-",
+      
+      TotalHours: record.checkOutTime ? calculateTotalHours(record.checkInTime, record.checkOutTime) : "-",
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "CheckInOutHistory");
-
     XLSX.writeFile(workbook, "CheckInOutHistory.xlsx");
   };
 
   const formatDateWithDay = (dateString) => {
     const date = new Date(dateString);
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString(undefined, options);
+    return date.toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
   };
 
   const calculateTotalHours = (checkIn, checkOut) => {
-    const differenceInMs = new Date(checkOut) - new Date(checkIn);
-    return (differenceInMs / (1000 * 60 * 60)).toFixed(2); // Convert ms to hours
+    return ((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60)).toFixed(2);
   };
 
   return (
@@ -95,10 +89,12 @@ function CheckInOutHistory() {
               {history.map(record => (
                 <tr key={record._id}>
                   <td>{`${record.firstName} ${record.lastName}`}</td>
-                  <td>{formatDateWithDay(record.date)}</td>
-                  <td>{new Date(record.checkInTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
-                  <td>{new Date(record.checkOutTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
-                  <td>{calculateTotalHours(record.checkInTime, record.checkOutTime)} hours</td>
+                  <td>{formatDateWithDay(record.checkInTime)}</td>
+                  <td>{record.checkInTime}</td>
+<td>{record.checkOutTime ? record.checkOutTime : "-"}</td>
+
+
+                  <td>{record.checkOutTime ? calculateTotalHours(record.checkInTime, record.checkOutTime) : "-"} hours</td>
                 </tr>
               ))}
             </tbody>

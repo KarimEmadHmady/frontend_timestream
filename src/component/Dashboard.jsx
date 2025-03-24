@@ -56,26 +56,14 @@ function Dashboard() {
   }, []);
 
   const handleCheckIn = async () => {
-    // Get current UTC time
-    const utcTime = new Date();
-    // Adjust to Cairo time (UTC+2)
-    const cairoOffset = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
-    const cairoTime = new Date(utcTime.getTime() + cairoOffset);
-
-    // Convert to UTC ISO string for storage
-    const checkInTime = cairoTime.toISOString();
-    const displayTime = timeFormatter.format(cairoTime); // For display
-
-    console.log("Adjusted Cairo Time:", cairoTime.toString());
-    console.log("Stored checkInTime (UTC):", checkInTime);
-    console.log("Displayed checkInTime:", displayTime);
-
+    const checkInTime = new Date().toLocaleString(); // وقت الجهاز بدون تحويل
+    
     setIsCheckedIn(true);
-    setStartTime(displayTime);
-
+    setStartTime(checkInTime);
+    
     localStorage.setItem("status", "checked-in");
     localStorage.setItem("checkInTime", checkInTime);
-
+  
     if (user) {
       try {
         const response = await axios.post(
@@ -85,39 +73,31 @@ function Dashboard() {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            checkInTime, // Send UTC time
+            checkInTime,
           }
         );
         toast.success(response.data.message);
       } catch (error) {
-        console.error(error);
         toast.error(error.response?.data?.error || "Failed to record check-in");
       }
     } else {
       toast.error("User not found");
     }
   };
-
+  
   const handleCheckOut = async () => {
-    // Get current time in Cairo timezone
-    const cairoTime = new Date().toLocaleString("en-US", { timeZone: "Africa/Cairo" });
-    const checkOutTime = new Date(cairoTime).toISOString(); // Convert to UTC for storage
-    const displayTime = timeFormatter.format(new Date(checkOutTime)); // For display
-
-    console.log("Cairo Time (Check-Out):", cairoTime);
-    console.log("Stored checkOutTime (UTC):", checkOutTime);
-    console.log("Displayed checkOutTime:", displayTime);
-
-    setEndTime(displayTime);
-
+    const checkOutTime = new Date().toLocaleString(); // وقت الجهاز بدون تحويل
+    
+    setEndTime(checkOutTime);
+    
     localStorage.setItem("status", "checked-out");
     localStorage.setItem("checkOutTime", checkOutTime);
-
+  
     if (user) {
       try {
         const response = await axios.post(
           `${import.meta.env.VITE_BACKEND_API_URL}/api/checkinout/checkout`,
-          { userId: user.id }
+          { userId: user.id, checkOutTime }
         );
         toast.success(response.data.message);
         setIsCheckedIn(false);
@@ -128,7 +108,7 @@ function Dashboard() {
       toast.error("User not found");
     }
   };
-
+  
   return (
     <div>
       <header>
@@ -178,10 +158,6 @@ function Dashboard() {
           </button>
         )}
       </div>
-
-      {startTime && <p>Check-in Time: {startTime}</p>}
-      {endTime && <p>Check-out Time: {endTime}</p>}
-
       <ToastContainer />
     </div>
   );
