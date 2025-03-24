@@ -91,7 +91,7 @@ function CheckInOutHistory() {
                   <td>{`${record.firstName} ${record.lastName}`}</td>
                   <td>{formatDateWithDay(record.checkInTime)}</td>
                   <td>{record.checkInTime}</td>
-<td>{record.checkOutTime ? record.checkOutTime : "-"}</td>
+                  <td>{record.checkOutTime ? record.checkOutTime : "-"}</td>
 
 
                   <td>{record.checkOutTime ? calculateTotalHours(record.checkInTime, record.checkOutTime) : "-"} hours</td>
